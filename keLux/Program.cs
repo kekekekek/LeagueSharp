@@ -42,7 +42,12 @@ namespace keLux
             if (Lux.ChampionCheck())
             {
                 new Lux();
+                LeagueSharp.Game.OnGameUpdate += OnGameUpdate;
             }
+        }
+
+        private static void OnGameUpdate(EventArgs arguments)
+        {
         }
     }
 }
