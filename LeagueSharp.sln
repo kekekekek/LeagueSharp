@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "keLux", "keLux\keLux.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "keMinimap", "keMinimap\keMinimap.csproj", "{B797273B-F4F7-4D46-B158-057FD6CCFD17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "keMinimapMod", "keMinimapMod\keMinimapMod.csproj", "{C8474471-33DC-42C2-BE88-5D2D297C95C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B797273B-F4F7-4D46-B158-057FD6CCFD17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B797273B-F4F7-4D46-B158-057FD6CCFD17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B797273B-F4F7-4D46-B158-057FD6CCFD17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8474471-33DC-42C2-BE88-5D2D297C95C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8474471-33DC-42C2-BE88-5D2D297C95C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8474471-33DC-42C2-BE88-5D2D297C95C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8474471-33DC-42C2-BE88-5D2D297C95C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
