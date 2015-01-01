@@ -14,7 +14,7 @@
 // GNU General Public License for more details.
 // 
 // You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #endregion
 
@@ -28,13 +28,10 @@ namespace keLux
 {
     internal sealed class Lux
     {
-        public Lux()
+        internal static bool ChampionCheck()
         {
-            if (ObjectManager.Player == null ||
-                ObjectManager.Player != null && !"Lux".Equals(ObjectManager.Player.ChampionName))
-            {
-                return;
-            }
+            return ObjectManager.Player == null ||
+                   ObjectManager.Player != null && !"Lux".Equals(ObjectManager.Player.ChampionName);
         }
     }
 }

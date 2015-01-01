@@ -14,7 +14,7 @@
 // GNU General Public License for more details.
 // 
 // You should have received a copy of the GNU General Public License
-// along with LeagueSharp.Common.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #endregion
 
@@ -39,7 +39,10 @@ namespace keLux
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "keLux.Lux")]
         private static void OnGameLoad(EventArgs arguments)
         {
-            new Lux();
+            if (Lux.ChampionCheck())
+            {
+                new Lux();
+            }
         }
     }
 }
