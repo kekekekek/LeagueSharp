@@ -34,6 +34,11 @@ namespace keMinimapMod
 {
     internal sealed class MinimapMod
     {
+        private readonly int initialHeight;
+        private readonly int initialLeft;
+        private readonly int initialTop;
+        private readonly int initialWidth;
+
         private readonly Dictionary<Dimension, int> maxValues = new Dictionary<Dimension, int>
         {
             { Dimension.Horizontal, Drawing.Width },
@@ -49,6 +54,15 @@ namespace keMinimapMod
 
         internal MinimapMod()
         {
+            Debug.Assert(values != null, "values != null");
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Left = initialLeft = left = values["left"].Value.Value;
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Top = initialTop = top = values["top"].Value.Value;
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Width = initialWidth = width = values["width"].Value.Value;
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Height = initialHeight = height = values["height"].Value.Value;
             values = new Dictionary<string, MenuWrapper.SliderLink>
             {
                 { "left", Slider("Left", Minimap.Left, Dimension.Horizontal) },
@@ -56,18 +70,34 @@ namespace keMinimapMod
                 { "width", Slider("Width", Minimap.Width, Dimension.Horizontal) },
                 { "height", Slider("Height", Minimap.Height, Dimension.Vertical) }
             };
-            UpdateValues();
+        }
+
+        ~MinimapMod()
+        {
+            Minimap.Left = initialLeft;
+            Minimap.Top = initialTop;
+            Minimap.Width = initialWidth;
+            Minimap.Height = initialHeight;
         }
 
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         internal void Update()
         {
             Debug.Assert(values != null, "values != null");
-            if (left != values["left"].Value.Value || top != values["top"].Value.Value ||
-                width != values["width"].Value.Value || height != values["height"].Value.Value)
+            if (left == values["left"].Value.Value && top == values["top"].Value.Value &&
+                width == values["width"].Value.Value && height == values["height"].Value.Value)
             {
-                UpdateValues();
+                return;
             }
+            Debug.Assert(values != null, "values != null");
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Left = left = values["left"].Value.Value;
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Top = top = values["top"].Value.Value;
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Width = width = values["width"].Value.Value;
+            // ReSharper disable once PossibleNullReferenceException
+            Minimap.Height = height = values["height"].Value.Value;
         }
 
         private MenuWrapper.SliderLink Slider(string property, float value, Dimension dimension)
@@ -82,19 +112,6 @@ namespace keMinimapMod
         {
             Horizontal,
             Vertical
-        }
-
-        private void UpdateValues()
-        {
-            Debug.Assert(values != null, "values != null");
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Left = left = values["left"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Top = top = values["top"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Width = width = values["width"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Height = height = values["height"].Value.Value;
         }
     }
 }
