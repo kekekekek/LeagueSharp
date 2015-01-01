@@ -21,6 +21,7 @@
 #region
 
 using LeagueSharp;
+using LeagueSharp.Common;
 
 #endregion
 
@@ -28,10 +29,14 @@ namespace keLux
 {
     internal sealed class Lux
     {
+        internal Lux()
+        {
+            new MenuWrapper("keLux", false);
+        }
+
         internal static bool ChampionCheck()
         {
-            return ObjectManager.Player == null ||
-                   ObjectManager.Player != null && !"Lux".Equals(ObjectManager.Player.ChampionName);
+            return "Lux".Equals(ObjectManager.Player.ChampionName);
         }
     }
 }
