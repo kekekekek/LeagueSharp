@@ -28,7 +28,7 @@ using LeagueSharp.Common;
 
 namespace keLux
 {
-    internal class Program
+    internal class Game
     {
         [SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "arguments")]
         private static void Main(string[] arguments)

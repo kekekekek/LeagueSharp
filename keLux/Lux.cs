@@ -31,7 +31,7 @@ namespace keLux
     {
         internal Lux()
         {
-            new MenuWrapper("keLux", false);
+            new MenuWrapper("keLux");
         }
 
         internal static bool ChampionCheck()
