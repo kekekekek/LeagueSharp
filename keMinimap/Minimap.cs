@@ -24,8 +24,12 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using LeagueSharp.Common;
+using SharpDX;
 
 #endregion
+
+// ReSharper disable ConvertMethodToExpressionBody
 
 [assembly: CLSCompliant(true)]
 
@@ -58,20 +62,31 @@ namespace KeMinimap
             set { Write(Offsets.Height, value); }
         }
 
+        public static bool MouseOver
+        {
+            get { return Mouse.X > Left && Mouse.X < Left + Width && Mouse.Y > Top && Mouse.Y < Top + Height; }
+        }
+
+        private static Vector2 Mouse
+        {
+            get { return Utils.GetCursorPos(); }
+        }
+
         private static IntPtr InitializeBaseAddress()
         {
             return Marshal.ReadIntPtr(
                 Marshal.ReadIntPtr(Process.GetCurrentProcess().MainModule.BaseAddress + 0x14C901C), 0xD4);
         }
 
+        // ReSharper disable once PossibleNullReferenceException
         private static float Read(Offsets property)
         {
-            return (float)Marshal.PtrToStructure(BaseAddress + (int)property, typeof(float));
+            return (float) Marshal.PtrToStructure(BaseAddress + (int) property, typeof(float));
         }
 
         private static void Write(Offsets property, float value)
         {
-            Marshal.StructureToPtr(value, BaseAddress + (int)property, false);
+            Marshal.StructureToPtr(value, BaseAddress + (int) property, false);
         }
 
         private enum Offsets
