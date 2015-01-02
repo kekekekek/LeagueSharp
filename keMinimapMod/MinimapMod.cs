@@ -54,6 +54,13 @@ namespace keMinimapMod
 
         internal MinimapMod()
         {
+            values = new Dictionary<string, MenuWrapper.SliderLink>
+            {
+                { "left", Slider("Left", Minimap.Left, Dimension.Horizontal) },
+                { "top", Slider("Top", Minimap.Top, Dimension.Vertical) },
+                { "width", Slider("Width", Minimap.Width, Dimension.Horizontal) },
+                { "height", Slider("Height", Minimap.Height, Dimension.Vertical) }
+            };
             Debug.Assert(values != null, "values != null");
             // ReSharper disable once PossibleNullReferenceException
             Minimap.Left = initialLeft = left = values["left"].Value.Value;
@@ -63,13 +70,6 @@ namespace keMinimapMod
             Minimap.Width = initialWidth = width = values["width"].Value.Value;
             // ReSharper disable once PossibleNullReferenceException
             Minimap.Height = initialHeight = height = values["height"].Value.Value;
-            values = new Dictionary<string, MenuWrapper.SliderLink>
-            {
-                { "left", Slider("Left", Minimap.Left, Dimension.Horizontal) },
-                { "top", Slider("Top", Minimap.Top, Dimension.Vertical) },
-                { "width", Slider("Width", Minimap.Width, Dimension.Horizontal) },
-                { "height", Slider("Height", Minimap.Height, Dimension.Vertical) }
-            };
         }
 
         ~MinimapMod()
