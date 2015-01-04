@@ -33,6 +33,8 @@ namespace keMinimapMod
 {
     internal sealed class MinimapMod
     {
+        private readonly MenuWrapper.BoolLink fogOfWarValue;
+        private readonly bool initialFogOfWar;
         private readonly int initialHeight;
         private readonly int initialLeft;
         private readonly int initialTop;
@@ -46,7 +48,8 @@ namespace keMinimapMod
         };
 
         private readonly MenuWrapper menu = new MenuWrapper("keMinimapMod", false, false);
-        private readonly Dictionary<string, MenuWrapper.SliderLink> values;
+        private readonly Dictionary<string, MenuWrapper.SliderLink> rangingValues;
+        private bool fogOfWar;
         private int height;
         private int left;
         private int top;
@@ -55,9 +58,9 @@ namespace keMinimapMod
 
         internal MinimapMod()
         {
-            Debug.Assert(menu != null, "menu == null");
-            Debug.Assert(menu.MainMenu != null, "menu.MainMenu == null");
-            values = new Dictionary<string, MenuWrapper.SliderLink>
+            Debug.Assert(menu != null, "MinimapMod(): menu = null");
+            Debug.Assert(menu.MainMenu != null, "MinimapMod(): menu.MainMenu == null");
+            rangingValues = new Dictionary<string, MenuWrapper.SliderLink>
             {
                 { "transparency", menu.MainMenu.AddLinkedSlider("Transparency", 100) },
                 { "left", Slider("Left", Minimap.Left, Dimension.Horizontal) },
@@ -65,7 +68,9 @@ namespace keMinimapMod
                 { "width", Slider("Width", Minimap.Width, Dimension.Horizontal) },
                 { "height", Slider("Height", Minimap.Height, Dimension.Vertical) }
             };
+            fogOfWarValue = menu.MainMenu.AddLinkedBool("Fog of War");
             Minimap.Transparency = initialTransparency = transparency = Transparency;
+            Minimap.FogOfWar = initialFogOfWar = fogOfWar = FogOfWar;
             Minimap.Left = initialLeft = left = Left;
             Minimap.Top = initialTop = top = Top;
             Minimap.Width = initialWidth = width = Width;
@@ -76,9 +81,19 @@ namespace keMinimapMod
         {
             get
             {
-                Debug.Assert(values != null, "values == null");
-                Debug.Assert(values["transparency"] != null, "values[\"transparency\"] == null");
-                return values["transparency"].Value.Value / 100f;
+                Debug.Assert(rangingValues != null, "Transparency: rangingValues = null");
+                Debug.Assert(
+                    rangingValues["transparency"] != null, "Transparency: rangingValues[\"transparency\"] = null");
+                return rangingValues["transparency"].Value.Value / 100f;
+            }
+        }
+
+        private bool FogOfWar
+        {
+            get
+            {
+                Debug.Assert(fogOfWarValue != null, "FogOfWar: fogOfWar = null");
+                return fogOfWarValue.Value;
             }
         }
 
@@ -86,9 +101,9 @@ namespace keMinimapMod
         {
             get
             {
-                Debug.Assert(values != null, "values == null");
-                Debug.Assert(values["left"] != null, "values[\"left\"] == null");
-                return values["left"].Value.Value;
+                Debug.Assert(rangingValues != null, "Left: rangingValues = null");
+                Debug.Assert(rangingValues["left"] != null, "Left: rangingValues[\"left\"] = null");
+                return rangingValues["left"].Value.Value;
             }
         }
 
@@ -96,9 +111,9 @@ namespace keMinimapMod
         {
             get
             {
-                Debug.Assert(values != null, "values == null");
-                Debug.Assert(values["top"] != null, "values[\"top\"] == null");
-                return values["top"].Value.Value;
+                Debug.Assert(rangingValues != null, "Top: rangingValues = null");
+                Debug.Assert(rangingValues["top"] != null, "Top: rangingValues[\"top\"] = null");
+                return rangingValues["top"].Value.Value;
             }
         }
 
@@ -106,9 +121,9 @@ namespace keMinimapMod
         {
             get
             {
-                Debug.Assert(values != null, "values == null");
-                Debug.Assert(values["width"] != null, "values[\"width\"] == null");
-                return values["width"].Value.Value;
+                Debug.Assert(rangingValues != null, "Width: rangingValues = null");
+                Debug.Assert(rangingValues["width"] != null, "Width: rangingValues[\"width\"] = null");
+                return rangingValues["width"].Value.Value;
             }
         }
 
@@ -116,15 +131,16 @@ namespace keMinimapMod
         {
             get
             {
-                Debug.Assert(values != null, "values == null");
-                Debug.Assert(values["height"] != null, "values[\"height\"] == null");
-                return values["height"].Value.Value;
+                Debug.Assert(rangingValues != null, "Height: rangingValues = null");
+                Debug.Assert(rangingValues["height"] != null, "Height: rangingValues[\"height\"] = null");
+                return rangingValues["height"].Value.Value;
             }
         }
 
         ~MinimapMod()
         {
             Minimap.Transparency = initialTransparency;
+            Minimap.FogOfWar = initialFogOfWar;
             Minimap.Left = initialLeft;
             Minimap.Top = initialTop;
             Minimap.Width = initialWidth;
@@ -133,9 +149,13 @@ namespace keMinimapMod
 
         internal void Update()
         {
-            if (Math.Abs(transparency - Transparency) >= 0.1)
+            if (Math.Abs(transparency - Transparency) >= 0.01)
             {
                 Minimap.Transparency = transparency = Transparency;
+            }
+            if (fogOfWar != FogOfWar)
+            {
+                Minimap.FogOfWar = fogOfWar = FogOfWar;
             }
             if (left == Left && top == Top && width == Width && height == Height)
             {
@@ -149,9 +169,9 @@ namespace keMinimapMod
 
         private MenuWrapper.SliderLink Slider(string property, float value, Dimension dimension)
         {
-            Debug.Assert(menu != null, "menu == null");
-            Debug.Assert(menu.MainMenu != null, "menu.MainMenu == null");
-            Debug.Assert(maxValues != null, "maxValues == null");
+            Debug.Assert(menu != null, "Slider(string, float, Dimension): menu = null");
+            Debug.Assert(menu.MainMenu != null, "Slider(string, float, Dimension): menu.MainMenu = null");
+            Debug.Assert(maxValues != null, "Slider(string, float, Dimension): maxValues = null");
             return menu.MainMenu.AddLinkedSlider(property, Convert.ToInt32(value), 0, maxValues[dimension]);
         }
 

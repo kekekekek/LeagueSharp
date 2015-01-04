@@ -47,7 +47,7 @@ namespace keMinimapMod
 
         private static void OnGameUpdate(EventArgs arguments)
         {
-            Debug.Assert(_mod != null, "mod != null");
+            Debug.Assert(_mod != null, "OnGameUpdate(arguments): _mod = null");
             _mod.Update();
         }
     }
