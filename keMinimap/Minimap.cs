@@ -104,13 +104,6 @@ namespace KeMinimap
             return Marshal.ReadIntPtr(Marshal.ReadIntPtr(ModuleBase + 0x14C901C), 0xD4);
         }
 
-        private static byte[] InitializeOriginalFogOfWarCall()
-        {
-            var originalFogOfWarCall = new byte[5];
-            Marshal.Copy(FogOfWarCall, originalFogOfWarCall, 0, originalFogOfWarCall.Length);
-            return originalFogOfWarCall;
-        }
-
         private static byte[] InitializeNopNearCall()
         {
             Debug.Assert(OriginalFogOfWarCall != null, "InitializeNopNearCall(): OriginalFogOfWarCall = null");
@@ -155,7 +148,7 @@ namespace KeMinimap
         }
 
         private static readonly IntPtr BaseAddress = InitializeBaseAddress();
-        private static readonly byte[] OriginalFogOfWarCall = InitializeOriginalFogOfWarCall();
+        private static readonly byte[] OriginalFogOfWarCall = { 0xE8, 0x4C, 0xA8, 0xE6, 0xFF };
         private static readonly byte[] NopNearCall = InitializeNopNearCall();
     }
 }
