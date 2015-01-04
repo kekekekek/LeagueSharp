@@ -38,6 +38,12 @@ namespace KeMinimap
     [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Minimap")]
     public static class Minimap
     {
+        public static float Transparency
+        {
+            get { return Read(Offsets.Transparency); }
+            set { Write(Offsets.Transparency, value); }
+        }
+
         public static float Left
         {
             get { return Read(Offsets.Left); }
@@ -78,10 +84,11 @@ namespace KeMinimap
                 Marshal.ReadIntPtr(Process.GetCurrentProcess().MainModule.BaseAddress + 0x14C901C), 0xD4);
         }
 
-        // ReSharper disable once PossibleNullReferenceException
         private static float Read(Offsets property)
         {
-            return (float) Marshal.PtrToStructure(BaseAddress + (int) property, typeof(float));
+            var value = Marshal.PtrToStructure(BaseAddress + (int) property, typeof(float));
+            Debug.Assert(value != null, "Value at offset " + (int) property + " is null");
+            return (float) value;
         }
 
         private static void Write(Offsets property, float value)
@@ -91,6 +98,7 @@ namespace KeMinimap
 
         private enum Offsets
         {
+            Transparency = 0x04,
             Left = 0xAC,
             Top = 0xB0,
             Width = 0xB4,
