@@ -23,7 +23,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using KeMinimap;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -37,6 +36,7 @@ namespace keMinimapMod
         private readonly int initialHeight;
         private readonly int initialLeft;
         private readonly int initialTop;
+        private readonly float initialTransparency;
         private readonly int initialWidth;
 
         private readonly Dictionary<Dimension, int> maxValues = new Dictionary<Dimension, int>
@@ -50,61 +50,108 @@ namespace keMinimapMod
         private int height;
         private int left;
         private int top;
+        private float transparency;
         private int width;
 
         internal MinimapMod()
         {
+            Debug.Assert(menu != null, "menu == null");
+            Debug.Assert(menu.MainMenu != null, "menu.MainMenu == null");
             values = new Dictionary<string, MenuWrapper.SliderLink>
             {
+                { "transparency", menu.MainMenu.AddLinkedSlider("Transparency", 100) },
                 { "left", Slider("Left", Minimap.Left, Dimension.Horizontal) },
                 { "top", Slider("Top", Minimap.Top, Dimension.Vertical) },
                 { "width", Slider("Width", Minimap.Width, Dimension.Horizontal) },
                 { "height", Slider("Height", Minimap.Height, Dimension.Vertical) }
             };
-            Debug.Assert(values != null, "values != null");
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Left = initialLeft = left = values["left"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Top = initialTop = top = values["top"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Width = initialWidth = width = values["width"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Height = initialHeight = height = values["height"].Value.Value;
+            Minimap.Transparency = initialTransparency = transparency = Transparency;
+            Minimap.Left = initialLeft = left = Left;
+            Minimap.Top = initialTop = top = Top;
+            Minimap.Width = initialWidth = width = Width;
+            Minimap.Height = initialHeight = height = Height;
+        }
+
+        private float Transparency
+        {
+            get
+            {
+                Debug.Assert(values != null, "values == null");
+                Debug.Assert(values["transparency"] != null, "values[\"transparency\"] == null");
+                return values["transparency"].Value.Value / 100f;
+            }
+        }
+
+        private int Left
+        {
+            get
+            {
+                Debug.Assert(values != null, "values == null");
+                Debug.Assert(values["left"] != null, "values[\"left\"] == null");
+                return values["left"].Value.Value;
+            }
+        }
+
+        private int Top
+        {
+            get
+            {
+                Debug.Assert(values != null, "values == null");
+                Debug.Assert(values["top"] != null, "values[\"top\"] == null");
+                return values["top"].Value.Value;
+            }
+        }
+
+        private int Width
+        {
+            get
+            {
+                Debug.Assert(values != null, "values == null");
+                Debug.Assert(values["width"] != null, "values[\"width\"] == null");
+                return values["width"].Value.Value;
+            }
+        }
+
+        private int Height
+        {
+            get
+            {
+                Debug.Assert(values != null, "values == null");
+                Debug.Assert(values["height"] != null, "values[\"height\"] == null");
+                return values["height"].Value.Value;
+            }
         }
 
         ~MinimapMod()
         {
+            Minimap.Transparency = initialTransparency;
             Minimap.Left = initialLeft;
             Minimap.Top = initialTop;
             Minimap.Width = initialWidth;
             Minimap.Height = initialHeight;
         }
 
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         internal void Update()
         {
-            Debug.Assert(values != null, "values != null");
-            if (left == values["left"].Value.Value && top == values["top"].Value.Value &&
-                width == values["width"].Value.Value && height == values["height"].Value.Value)
+            if (Math.Abs(transparency - Transparency) >= 0.1)
+            {
+                Minimap.Transparency = transparency = Transparency;
+            }
+            if (left == Left && top == Top && width == Width && height == Height)
             {
                 return;
             }
-            Debug.Assert(values != null, "values != null");
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Left = left = values["left"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Top = top = values["top"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Width = width = values["width"].Value.Value;
-            // ReSharper disable once PossibleNullReferenceException
-            Minimap.Height = height = values["height"].Value.Value;
+            Minimap.Left = left = Left;
+            Minimap.Top = top = Top;
+            Minimap.Width = width = Width;
+            Minimap.Height = height = Height;
         }
 
         private MenuWrapper.SliderLink Slider(string property, float value, Dimension dimension)
         {
-            Debug.Assert(menu != null, "menu != null");
-            Debug.Assert(menu.MainMenu != null, "menu.MainMenu != null");
-            Debug.Assert(maxValues != null, "maxValues != null");
+            Debug.Assert(menu != null, "menu == null");
+            Debug.Assert(menu.MainMenu != null, "menu.MainMenu == null");
+            Debug.Assert(maxValues != null, "maxValues == null");
             return menu.MainMenu.AddLinkedSlider(property, Convert.ToInt32(value), 0, maxValues[dimension]);
         }
 
